@@ -1,0 +1,19 @@
+---
+- name: Install Duo Unix package (Ubuntu)
+  include_tasks:
+    file: ubuntu.yaml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install Duo Unix package (CentOS)
+  include_tasks:
+    file: centos.yaml
+  when: ansible_distribution == 'CentOS'
+  
+- name: Configure Duo Unix package (All)
+  template:
+    src: pam_duo.conf.j2
+    dest: /etc/duo/pam_duo.conf
+    owner: root
+    group: root
+    mode: 0600
+...

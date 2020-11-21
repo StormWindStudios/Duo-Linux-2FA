@@ -1,0 +1,7 @@
+---
+ - name: Configuring Duo 2FA for Unix
+   hosts: all
+   roles:
+     - duo
+     - ssh
+     - pam     

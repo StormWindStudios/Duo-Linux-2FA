@@ -1,0 +1,14 @@
+---
+- name: Updating SSHD configurations
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.newline }}"
+  loop:
+    - { regexp: '^#?PubkeyAuthentication', newline: 'PubkeyAuthentication yes' }
+    - { regexp: '^#?PasswordAuthentication', newline: 'PasswordAuthentication no' }
+    - { regexp: '^#?AuthenticationMethods', newline: 'AuthenticationMethods publickey,keyboard-interactive' }
+    - { regexp: '^#?UsePAM', newline: 'UsePAM yes' }
+    - { regexp: '^#?ChallengeResponseAuthentication', newline: 'ChallengeResponseAuthentication yes' }
+    - { regexp: '^#?UseDNS', newline: 'UseDNS no' }
+...

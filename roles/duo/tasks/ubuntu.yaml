@@ -1,0 +1,19 @@
+---
+- name: Installing Duo GPG key (Ubuntu)
+  ansible.builtin.apt_key:
+    url: https://duo.com/DUO-GPG-PUBLIC-KEY.asc
+    state: present
+    id: 08C2A645DDF240B85844068D7A450864C1A07A85
+
+- name: Adding repository for Duo Unix (Ubuntu)
+  ansible.builtin.apt_repository:
+    repo: "deb https://pkg.duosecurity.com/Ubuntu {{ ansible_distribution_release }} main"
+    state: present
+    filename: duosecurity.list
+
+- name: Installing Duo Unix (Ubunut)
+  ansible.builtin.apt:
+    name: duo-unix
+    state: present
+    update_cache: yes
+...
