@@ -2,8 +2,8 @@
 - name: Installing Duo GPG key (CentOS)
   ansible.builtin.rpm_key:
     state: present
-    key: https://duo.com/DUO-GPG-PUBLIC-KEY.asc
-    fingerprint: 08C2 A645 DDF2 40B8 5844 068D 7A45 0864 C1A0 7A85 
+    key: "{{ duo_key_url }}"
+    fingerprint: "{{ duo_key_id }}"
 
 - name: Copying Duo repository file (CentOS)
   ansible.builtin.copy:

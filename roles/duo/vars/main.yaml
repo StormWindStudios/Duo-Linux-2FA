@@ -1,0 +1,5 @@
+---
+### Location of Duo's GPG public key
+duo_key_url: https://duo.com/DUO-GPG-PUBLIC-KEY.asc
+duo_key_id: 08C2A645DDF240B85844068D7A450864C1A07A85
+...

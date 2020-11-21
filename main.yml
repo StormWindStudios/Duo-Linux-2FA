@@ -1,7 +1,18 @@
 ---
  - name: Configuring Duo 2FA for Unix
    hosts: all
+   gather_facts: no
+   pre_tasks:
+     - name: Loading Duo variables
+       include_vars: duo_vars.secret.yaml 
    roles:
-     - duo
-     - ssh
-     - pam     
+     - role: harden_ssh_config
+     - role: duo
+       tags: 
+         - skip_harden
+     - role: duo_ssh_config
+       tags:
+         - skip_harden
+     - role: pam
+       tags:
+         - skip_harden     

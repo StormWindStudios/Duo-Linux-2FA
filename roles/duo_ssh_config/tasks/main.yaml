@@ -11,4 +11,5 @@
     - { regexp: '^#?UsePAM', newline: 'UsePAM yes' }
     - { regexp: '^#?ChallengeResponseAuthentication', newline: 'ChallengeResponseAuthentication yes' }
     - { regexp: '^#?UseDNS', newline: 'UseDNS no' }
+  notify: Restart sshd
 ...

@@ -1,0 +1,5 @@
+---
+pam_sshd: /etc/pam.d/sshd
+pam_common_auth: /etc/pam.d/common-auth
+pam_system_auth: /etc/pam.d/system-auth
+...
