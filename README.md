@@ -15,8 +15,9 @@ Automatically deploy Duo 2FA on major Linux distributions.
 ### Usage
 
  1. Create a Duo account and make a UNIX Application.
-![Duo Unix Applications](/assets/duo_unix_app.png)
  2. Gather the secrets for the application and place them in 'duo_vars.secret.yaml'. See duo_vars.secret.yaml.example for syntax.
  3. After saving your secrets in duo_vars.secret.yaml, encrypt it using `ansible-vault encrypt duo_vars.secret.yaml`.
  4. Create a text file with your chosen vault password (default is ~/.ansible_vault)
  5. Restrict the permission on the password file using `chmod 600 ~/.ansible_vault`
+ 6. Add host to the host file.
+ 7. Execute playbook with `ansible-playbook main.yaml`
