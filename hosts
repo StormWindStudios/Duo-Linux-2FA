@@ -1,6 +1,6 @@
 ---
 all:
   hosts:
-    deb1.tachyon.cx:
+    ubuntu1.tachyon.cx:
       ansible_port: 2222
 ...
