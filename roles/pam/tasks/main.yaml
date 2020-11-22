@@ -6,7 +6,11 @@
 - name: Updating PAM configurations (CentOS)
   include_tasks: centos.yaml
   when: ansible_distribution == "CentOS"
-  
+
+- name: Updating PAM configurations (Debian)
+  include_tasks: debian.yaml
+  when: ansible_distribution == "Debian"
+
 - name: Setting sudo timeout to 15 minutes
   ansible.builtin.lineinfile:
     path: /etc/sudoers

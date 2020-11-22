@@ -1,0 +1,25 @@
+---
+- name: Installing GPG, python3-apt (Debian)
+  ansible.builtin.apt:
+    name: "gpg"
+    state: present
+    update_cache: yes
+
+- name: Installing Duo GPG key (Debian)
+  ansible.builtin.apt_key:
+    url: "{{ duo_key_url }}"
+    state: present
+    id: "{{ duo_key_id }}"
+
+- name: Adding repository for Duo Unix (Debian)
+  ansible.builtin.apt_repository:
+    repo: "deb https://pkg.duosecurity.com/Debian {{ ansible_distribution_release }} main"
+    state: present
+    filename: duosecurity.list
+
+- name: Installing Duo Unix (Debian)
+  ansible.builtin.apt:
+    name: duo-unix
+    state: present
+    update_cache: yes
+...

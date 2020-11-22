@@ -72,10 +72,10 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   loop:
-    - { regexp: "^#?LoginGraceTime", line: "LoginGraceTime 1m" }
-    - { regexp: "^#?MaxAuthTries", line: "MaxAuthTries 4" }
-    - { regexp: "^#?X11Forwarding", line: "X11Forwarding no" }
-    - { regexp: "^Port", line: "Port {{ configured_port }}" }
+    - { regexp: '^#?\s?LoginGraceTime', line: "LoginGraceTime 1m" }
+    - { regexp: '^#?\s?MaxAuthTries', line: "MaxAuthTries 4" }
+    - { regexp: '^#?\s?X11Forwarding', line: "X11Forwarding no" }
+    - { regexp: '^#?\s?Port', line: "Port {{ configured_port }}" }
   notify: "Restart sshd"
 
 # Gather facts should be set to false when running this role since it will

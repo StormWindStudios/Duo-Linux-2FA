@@ -11,7 +11,7 @@
     state: present
     filename: duosecurity.list
 
-- name: Installing Duo Unix (Ubunut)
+- name: Installing Duo Unix (Ubuntu)
   ansible.builtin.apt:
     name: duo-unix
     state: present

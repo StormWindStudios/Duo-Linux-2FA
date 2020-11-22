@@ -1,0 +1,56 @@
+---
+- name: Finding pam_duo.so
+  set_fact: 
+    pam_duo_path: "{{lookup('first_found', pam_duo, errors='ignore')}}"
+  vars:
+    pam_duo:
+      - "/lib/security/pam_duo.so"
+      - "/lib64/security/pam_duo.so"
+
+- name: Updating PAM configurations (sshd - 1)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_sshd }}"
+    regexp: '^#?@include\s+common-auth'
+    line: "#@include common-auth"
+
+- name: Updating PAM configurations (sshd - 2)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_sshd }}"
+    insertafter: '^#?@include common-auth'
+    regexp: '^auth\s+\[success=1\s+default=ignore\]'
+    line: "auth  [success=1 default=ignore] {{ pam_duo_path }}"
+
+- name: Updating PAM configurations (sshd - 3)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_sshd }}"
+    insertafter: '^auth\s+\[success=1\s+default=ignore\]'
+    regexp: '^auth\s+requisite'
+    line: "auth  requisite pam_deny.so"
+
+- name: Updating PAM configurations (sshd - 4)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_sshd }}"
+    insertafter: '^auth\s+requisite'
+    regexp: '^auth\s+required'
+    line: "auth required pam_permit.so"
+
+- name: Updating PAM configurations (common-auth - 1)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_common_auth }}"
+    regexp: '^#?auth\s+\[success=1\sdefault=ignore\]\s+pam_unix'
+    line: "#auth [success=1 default=ignore] pam_unix.so nullok_secure"
+
+- name: Updating PAM configurations (common-auth - 2)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_common_auth }}"
+    insertafter: '^#?auth\s+\[success=1\sdefault=ignore\]\s+pam_unix'
+    regexp: '^auth\s+requisite\s+pam_unix'
+    line: "auth requisite pam_unix.so nullok_secure"
+
+- name: Updating PAM configurations (common-auth - 3)
+  ansible.builtin.lineinfile:
+    path: "{{ pam_common_auth }}"
+    insertafter: '^auth\s+requisite\s+pam_unix'
+    regexp: '^auth\s+\[success=1\sdefault=ignore\]\spam_duo'
+    line: "auth  [success=1 default=ignore] pam_duo.so"
+...
