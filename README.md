@@ -21,3 +21,4 @@ Automatically deploy Duo 2FA on major Linux distributions.
  5. Restrict the permission on the password file using `chmod 600 ~/.ansible_vault`
  6. Add host(s) to the host file. Specify the desired SSH port and sudo timeout (grace period from 2FA when using sudo)
  7. Execute playbook with `ansible-playbook main.yaml`
+ 8. Connect to the system over SSH and verify configurations against [Duo's guide](https://duo.com/docs/duounix), if desired. When satisfied, restart sshd with `sudo systemctl restart sshd`. The configurations will now be in effect.
