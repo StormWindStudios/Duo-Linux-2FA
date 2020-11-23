@@ -19,5 +19,5 @@ Automatically deploy Duo 2FA on major Linux distributions.
  3. After saving your secrets in duo_vars.secret.yaml, encrypt it using `ansible-vault encrypt duo_vars.secret.yaml`.
  4. Create a text file with your chosen vault password (default is ~/.ansible_vault)
  5. Restrict the permission on the password file using `chmod 600 ~/.ansible_vault`
- 6. Add host to the host file.
+ 6. Add host(s) to the host file. Specify the desired SSH port and sudo timeout (grace period from 2FA when using sudo)
  7. Execute playbook with `ansible-playbook main.yaml`

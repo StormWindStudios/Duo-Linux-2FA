@@ -1,20 +1,12 @@
 ---
-- name: Install Duo Unix package (Ubuntu)
+- name: Install Duo Unix package
   include_tasks:
-    file: ubuntu.yaml
-  when: ansible_distribution == 'Ubuntu'
+    file: "{{ ansible_distribution | lower }}.yaml"
+  when: ansible_distribution == 'Ubuntu' or
+        ansible_distribution == 'CentOS' or
+        ansible_distribution == 'Debian'
 
-- name: Install Duo Unix package (CentOS)
-  include_tasks:
-    file: centos.yaml
-  when: ansible_distribution == 'CentOS'
-
-- name: Install Duo Unix package (Debian)
-  include_tasks:
-    file: debian.yaml
-  when: ansible_distribution == 'Debian'
-
-- name: Configure Duo Unix package (All)
+- name: Configure Duo Unix package  
   template:
     src: pam_duo.conf.j2
     dest: /etc/duo/pam_duo.conf

@@ -27,6 +27,7 @@
   set_fact:
     ansible_port: "22"
   when: default_ssh is defined and
+        default_ssh.state is defined and
         default_ssh.state == "started"
   register: ssh_port_set
   ignore_errors: "yes"

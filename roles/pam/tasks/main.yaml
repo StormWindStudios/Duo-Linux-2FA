@@ -1,20 +1,15 @@
 ---
 - name: Updating PAM configurations (Ubuntu)
-  include_tasks: ubuntu.yaml
-  when: ansible_distribution == "Ubuntu"
+  include_tasks:
+    file: "{{ ansible_distribution | lower }}.yaml"
+  when: ansible_distribution == 'Ubuntu' or
+        ansible_distribution == 'CentOS' or
+        ansible_distribution == 'Debian'
 
-- name: Updating PAM configurations (CentOS)
-  include_tasks: centos.yaml
-  when: ansible_distribution == "CentOS"
-
-- name: Updating PAM configurations (Debian)
-  include_tasks: debian.yaml
-  when: ansible_distribution == "Debian"
-
-- name: Setting sudo timeout to 15 minutes
+- name: Setting sudo timeout 
   ansible.builtin.lineinfile:
     path: /etc/sudoers
     regexp: '^Defaults\s+env_reset'
-    line: 'Defaults        env_reset,timestamp_timeout=15'
+    line: 'Defaults        env_reset,timestamp_timeout={{ sudo_timeout }}'
     validate: /usr/sbin/visudo -cf %s
 ...
