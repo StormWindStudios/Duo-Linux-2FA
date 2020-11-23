@@ -2,8 +2,6 @@
  - name: Configuring Duo 2FA for Unix
    hosts: all
    gather_facts: no
-   vars:
-     ansible_python_interpreter: /usr/bin/python3
    pre_tasks:
      - name: Loading Duo variables
        include_vars: duo_vars.secret.yaml 

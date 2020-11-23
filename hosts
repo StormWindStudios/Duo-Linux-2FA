@@ -4,4 +4,10 @@ all:
     ubuntu1.tachyon.cx:
       ansible_port: 2222
       sudo_timeout: 15
+    debian1.tachyon.cx:
+      ansible_port: 2223
+      sudo_timeout: 20
+    centos1.tachyon.cx:
+      ansible_port: 2224
+      sudo_timeout: 25
 ...
