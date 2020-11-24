@@ -11,9 +11,9 @@ Automatically deploy Duo 2FA on major Linux distributions.
  2. Installs the duo-unix PAM module.
  3. Reconfigures SSH to use public key and Duo for two-factor authentication.
  4. Updates PAM configurations.
+ 5. Adds a new sudo user and disables root login for SSH.
 
 ### Usage
-
  1. Create a Duo account and make a UNIX Application.
  2. Gather the secrets for the application and place them in 'duo_vars.secret.yaml'. See duo_vars.secret.yaml.example for syntax.
  3. After saving your secrets in duo_vars.secret.yaml, encrypt it using `ansible-vault encrypt duo_vars.secret.yaml`.
