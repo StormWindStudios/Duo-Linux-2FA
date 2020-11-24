@@ -33,13 +33,13 @@
   ansible.builtin.lineinfile:
     path: "{{ pam_sshd }}"
     insertafter: '^auth\s+required\s+pam_env'
-    regexp: '^auth\s+sufficient\s+pam_duo'
-    line: "auth  sufficient pam_duo.so"
+    regexp: '^auth\s+sufficient\s+{{ pam_duo_path }}'
+    line: "auth  sufficient {{ pam_duo_path }}"
 
 - name: Updating PAM configurations (sshd - 4)
   ansible.builtin.lineinfile:
     path: "{{ pam_sshd }}"
-    insertafter: '^auth\s+sufficient\s+pam_duo'
+    insertafter: '^auth\s+sufficient\s+{{ pam_duo_path }}'
     regexp: '^auth\s+required\s+pam_deny'
     line: "auth  required pam_deny.so"
 
@@ -60,6 +60,6 @@
   ansible.builtin.lineinfile:
     path: "{{ pam_system_auth }}"
     insertafter: '^auth\s+requisite\s+pam_unix.so\s+nullok\s+try_first_pass'
-    regexp: '^auth\s+sufficient\s+pam_duo.so'
-    line: "auth        sufficient                                   pam_duo.so"
+    regexp: '^auth\s+sufficient\s+{{ pam_duo_path }}'
+    line: "auth        sufficient                                   {{ pam_duo_path }}"
 ...

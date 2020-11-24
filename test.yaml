@@ -1,0 +1,20 @@
+---
+- name: Testing local actions
+  hosts: localhost
+  vars:
+    inv_hostname: centos.tachyon.cx
+    user:
+      name: shane
+      ssh_key_pass: hello
+      ssh_algorithm: ed25519
+      ssh_dir: /home/shane/.ansible_user_keys
+  tasks:
+    - name: Test local action
+      local_action: 
+        module: command
+        argv:
+          - ssh-keygen
+          - -t{{ user.ssh_algorithm }}
+          - -f{{ user.ssh_dir }}/{{ user.name }}@{{ inv_hostname }}
+        creates: "{{ user.ssh_dir }}/{{ user.name }}@{{ inv_hostname }}"
+

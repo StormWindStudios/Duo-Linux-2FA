@@ -51,6 +51,6 @@
   ansible.builtin.lineinfile:
     path: "{{ pam_common_auth }}"
     insertafter: '^auth\s+requisite\s+pam_unix'
-    regexp: '^auth\s+\[success=1\sdefault=ignore\]\spam_duo'
-    line: "auth  [success=1 default=ignore] pam_duo.so"
+    regexp: '^auth\s+\[success=1\sdefault=ignore\]\s{{ pam_duo_path}}'
+    line: "auth  [success=1 default=ignore] {{ pam_duo_path }}"
 ...

@@ -4,9 +4,12 @@
    gather_facts: no
    pre_tasks:
      - name: Loading Duo variables
-       include_vars: duo_vars.secret.yaml 
+       include_vars: duo_vars.secret.yaml
+     - name: Loading new user variables
+       include_vars: new_user_creds.secret.yaml  
    roles:
-     - role: harden_ssh_config
-     - role: duo
-     - role: duo_ssh_config
-     - role: pam
+           - role: harden_ssh_config
+           - role: duo
+           - role: duo_ssh_config
+           - role: pam
+           - role: ssh_user

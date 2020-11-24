@@ -1,0 +1,79 @@
+---
+- name: Gathering facts
+  ansible.builtin.setup:
+
+- name: Choose correct sudo group (Centos)
+  ansible.builtin.set_fact:
+    sudo_group: wheel
+  when: ansible_distribution == 'CentOS'
+
+- name: Choose correct sudo group (Ubuntu)
+  ansible.builtin.set_fact:
+    sudo_group: sudo
+  when: ansible_distribution == 'Ubuntu'  
+
+- name: Choose correct sudo group (Debian)
+  ansible.builtin.set_fact:
+    sudo_group: sudo
+  when: ansible_distribution == 'Debian'
+  
+- name: Add new SSH user with sudo permissions
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    state: present
+    password: "{{ user.password | password_hash('sha512') }}"
+    shell: "{{ user.shell }}"
+    groups: "{{ sudo_group }}"
+    append: yes
+
+- name: Create an SSH directory for user remotely
+  file:
+    path: "/home/{{ user.name }}/.ssh"
+    state: directory
+    mode: '0700' 
+
+- name: Create an SSH dir locally for user keys (if not present)
+  local_action:
+    module: command
+    cmd: "mkdir {{ user.ssh_dir }}"
+    creates: "{{ user.ssh_dir }}"
+
+- name: Create keypair in local directory
+  local_action:
+    module: community.crypto.openssh_keypair
+    path: "{{ user.ssh_dir }}/{{ user.name }}@{{ inventory_hostname }}"
+    type: "{{ user.ssh_algorithm }}"
+
+- name: Copy appropriate public key to server user   
+  ansible.posix.authorized_key:
+    user: "{{ user.name }}"
+    state: present
+    key: "{{ lookup('file', '{{ user.ssh_dir }}/{{ user.name }}@{{ inventory_hostname }}.pub') }}"
+
+- name: Set variables to test connection
+  set_fact:
+    normal_user: "{{ ansible_user }}"
+    ansible_user: "{{ user.name }}"
+    ansible_ssh_private_key_file: "{{ user.ssh_dir }}/{{ user.name }}@{{ inventory_hostname }}"
+
+- name: Test connection using new user 
+  ping:
+  register: ping_result
+
+- name: Switch back to normal Ansible user
+  set_fact:
+    ansible_user: "{{ normal_user }}" 
+
+- name: Disable root login if new user is working
+  ansible.builtin.lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: '^#?\s?PermitRootLogin'
+    line: "PermitRootLogin no"
+  when: ping_result is succeeded
+
+- name: Restart sshd if connection is successful
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+  when: ping_result is succeeded
+...
