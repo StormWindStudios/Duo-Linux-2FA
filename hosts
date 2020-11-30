@@ -1,7 +1,14 @@
 ---
+# define ansible_port if using all roles (full tag)
 all:
   hosts:
     centos1.tachyon.cx:
-      ansible_port: 2222
       sudo_timeout: 15
+      ansible_port: 2222
+    ubuntu1.tachyon.cx:
+      sudo_timeout: 16
+      ansible_port: 2223
+    debian1.tachyon.cx:
+      sudo_timeout: 17
+      ansible_port: 2224
 ...

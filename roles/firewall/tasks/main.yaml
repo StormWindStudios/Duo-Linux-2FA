@@ -1,0 +1,12 @@
+---
+- name: Gathering facts if necessary
+  ansible.builtin.setup:
+  when: ansible_distribution is undefined 
+
+- name: Updating PAM configurations (Ubuntu)
+  include_tasks:
+    file: "{{ ansible_distribution | lower }}.yaml"
+  when: ansible_distribution == 'Ubuntu' or
+        ansible_distribution == 'CentOS' or
+        ansible_distribution == 'Debian'
+...

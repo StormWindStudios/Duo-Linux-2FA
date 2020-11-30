@@ -1,4 +1,13 @@
 ---
+- name: Update SSH port depending on execution tags
+  set_fact:
+    ansible_port: 22
+  when: "'full' is not in ansible_run_tags"
+
+- name: Gather facts if necessary
+  setup:
+  when: "'full' is not in ansible_run_tags"
+
 - name: Install Duo Unix package
   include_tasks:
     file: "{{ ansible_distribution | lower }}.yaml"

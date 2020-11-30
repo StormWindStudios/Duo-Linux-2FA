@@ -1,0 +1,17 @@
+---
+- name: Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Open SSH port
+  ansible.builtin.ufw:
+    port: "{{ ansible_port }}"
+    proto: tcp
+    rule: allow
+
+- name: Enable firewall
+  ansible.builtin.ufw:
+    state: enabled 
+...

@@ -1,4 +1,11 @@
 ---
+- name: Setting sudo timeout
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^Defaults\s+env_reset'
+    line: 'Defaults        env_reset,timestamp_timeout={{ sudo_timeout }}'
+    validate: /usr/sbin/visudo -cf %s
+
 - name: Updating PAM configurations (Ubuntu)
   include_tasks:
     file: "{{ ansible_distribution | lower }}.yaml"
@@ -6,10 +13,8 @@
         ansible_distribution == 'CentOS' or
         ansible_distribution == 'Debian'
 
-- name: Setting sudo timeout 
-  ansible.builtin.lineinfile:
-    path: /etc/sudoers
-    regexp: '^Defaults\s+env_reset'
-    line: 'Defaults        env_reset,timestamp_timeout={{ sudo_timeout }}'
-    validate: /usr/sbin/visudo -cf %s
+- name: Restart sshd if stopping here
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted  
 ...

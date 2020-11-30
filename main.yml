@@ -5,11 +5,32 @@
    pre_tasks:
      - name: Loading Duo variables
        include_vars: duo_vars.secret.yaml
+       tags:
+         - base
+         - full
      - name: Loading new user variables
-       include_vars: new_user_creds.secret.yaml  
+       include_vars: new_user_creds.secret.yaml
+       tags:
+         - full
    roles:
            - role: harden_ssh_config
+             tags:
+               - full
+           - role: firewall
+             tags:
+               - full
            - role: duo
+             tags:
+               - base
+               - full
            - role: duo_ssh_config
+             tags:
+               - base
+               - full
            - role: pam
+             tags:
+               - base
+               - full
            - role: ssh_user
+             tags:
+               - full

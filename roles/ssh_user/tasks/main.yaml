@@ -37,12 +37,14 @@
     module: command
     cmd: "mkdir {{ user.ssh_dir }}"
     creates: "{{ user.ssh_dir }}"
+  become: false
 
 - name: Create keypair in local directory
   local_action:
     module: community.crypto.openssh_keypair
     path: "{{ user.ssh_dir }}/{{ user.name }}@{{ inventory_hostname }}"
     type: "{{ user.ssh_algorithm }}"
+  become: false
 
 - name: Copy appropriate public key to server user   
   ansible.posix.authorized_key:
@@ -50,30 +52,14 @@
     state: present
     key: "{{ lookup('file', '{{ user.ssh_dir }}/{{ user.name }}@{{ inventory_hostname }}.pub') }}"
 
-- name: Set variables to test connection
-  set_fact:
-    normal_user: "{{ ansible_user }}"
-    ansible_user: "{{ user.name }}"
-    ansible_ssh_private_key_file: "{{ user.ssh_dir }}/{{ user.name }}@{{ inventory_hostname }}"
-
-- name: Test connection using new user 
-  ping:
-  register: ping_result
-
-- name: Switch back to normal Ansible user
-  set_fact:
-    ansible_user: "{{ normal_user }}" 
-
-- name: Disable root login if new user is working
+- name: Disable root login
   ansible.builtin.lineinfile:
     dest: "/etc/ssh/sshd_config"
     regexp: '^#?\s?PermitRootLogin'
     line: "PermitRootLogin no"
-  when: ping_result is succeeded
 
-- name: Restart sshd if connection is successful
+- name: Restart sshd
   ansible.builtin.systemd:
     name: sshd
     state: restarted
-  when: ping_result is succeeded
 ...
